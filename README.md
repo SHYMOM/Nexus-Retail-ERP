@@ -75,7 +75,7 @@ The system is built on a relational SQL model:
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/SHYMOM/Enterprise-Resource-Planning.git](https://github.com/SHYMOM/Enterprise-Resource-Planning.git)
+    git clone https://github.com/SHYMOM/Enterprise-Resource-Planning.git
     ```
 2.  **Database Setup:**
     * Open **SQL Server Management Studio (SSMS)**.
