@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "dgSpecHash": "knsmuYORBRk=",
+  "success": true,
+  "projectFilePath": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\USERAS\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\USERAS\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\USERAS\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\USERAS\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\USERAS\\.nuget\\packages\\system.configuration.configurationmanager\\10.0.1\\system.configuration.configurationmanager.10.0.1.nupkg.sha512",
+    "C:\\Users\\USERAS\\.nuget\\packages\\system.data.sqlclient\\4.9.0\\system.data.sqlclient.4.9.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "PackageReference System.Configuration.ConfigurationManager will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "projectPath": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj",
+      "libraryId": "System.Configuration.ConfigurationManager",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    }
+  ]
+}
