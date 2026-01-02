@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "E:\\University\\C# Project\\Nexus-Retail-ERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\nexus-retail-erp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\nexus-retail-erp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\splashscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\splashscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\splashscreen.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\splashscreen.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|E:\\University\\C# Project\\Nexus-Retail-ERP\\nexus-retail-erp\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|E:\\University\\C# Project\\Nexus-Retail-ERP\\nexus-retail-erp\\forms\\splashscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\splashscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|E:\\University\\C# Project\\Nexus-Retail-ERP\\nexus-retail-erp\\forms\\signinportal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\signinportal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,44 +26,64 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c6f34f0d-7ae5-4f3a-be61-fe0c21ae9eb8}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Nexus-Retail-ERP",
-              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj",
-              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj",
-              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj*",
-              "RelativeToolTip": "Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-31T20:31:49.625Z",
+              "Title": "SplashScreen.cs",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T19:58:46.471Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "App.config",
-              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\App.config",
-              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\App.config",
-              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\App.config",
-              "RelativeToolTip": "Nexus-Retail-ERP\\App.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-12-31T20:14:16.12Z",
+              "Title": "SplashScreen.Designer.cs",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.Designer.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\SplashScreen.Designer.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.Designer.cs",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\SplashScreen.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T19:58:25.504Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Form1.cs",
-              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Form1.cs",
-              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Form1.cs [Design]",
-              "RelativeToolTip": "Nexus-Retail-ERP\\Form1.cs [Design]",
+              "Title": "SplashScreen.cs [Design]",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\SplashScreen.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SplashScreen.cs [Design]",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\SplashScreen.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T20:09:00.806Z",
+              "WhenOpened": "2026-01-02T19:52:11.809Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SignInPortal.cs [Design]",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SignInPortal.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\SignInPortal.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\SignInPortal.cs [Design]",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\SignInPortal.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T19:52:02.644Z",
               "EditorCaption": " [Design]"
             }
           ]
