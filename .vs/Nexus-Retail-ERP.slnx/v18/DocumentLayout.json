@@ -7,8 +7,24 @@
       "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\employeemanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\employeemanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\employeemanagementform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\employeemanagementform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\data\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\data\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\employeemanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\employeemanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|e:\\university\\c# project\\nexus-retail-erp\\nexus-retail-erp\\forms\\ownerdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{941C4A7E-5FF2-5BB3-E311-BD4816A054E5}|Nexus-Retail-ERP\\Nexus-Retail-ERP.csproj|solutionrelative:nexus-retail-erp\\forms\\ownerdashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,13 +38,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "DatabaseHelper.cs",
               "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Data\\DatabaseHelper.cs",
               "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Data\\DatabaseHelper.cs",
-              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Data\\DatabaseHelper.cs",
-              "RelativeToolTip": "Nexus-Retail-ERP\\Data\\DatabaseHelper.cs",
-              "ViewState": "AgIAAJICAAAAAAAAAAAxwF4CAAAAAAAAAAAAAA==",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Data\\DatabaseHelper.cs*",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Data\\DatabaseHelper.cs*",
+              "ViewState": "AgIAAPwBAAAAAAAAAAAAACECAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T12:42:42.316Z",
               "IsPinned": true,
@@ -40,13 +56,63 @@
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Program.cs",
               "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Program.cs",
-              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Program.cs",
-              "RelativeToolTip": "Nexus-Retail-ERP\\Program.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAsAAAAAAAAAA==",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Program.cs*",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Program.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-16T19:25:31.537Z",
               "IsPinned": true,
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmployeeManagementForm.Designer.cs",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.Designer.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.Designer.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.Designer.cs*",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.Designer.cs*",
+              "ViewState": "AgIAAKEAAAAAAAAAAAAAAKwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T17:37:01.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmployeeManagementForm.cs",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs*",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs*",
+              "ViewState": "AgIAAEQAAAAAAAAAAAA5wD0AAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T17:36:40.928Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmployeeManagementForm.cs [Design]",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs [Design]*",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\EmployeeManagementForm.cs [Design]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T17:36:25.308Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OwnerDashboard.cs [Design]",
+              "DocumentMoniker": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\OwnerDashboard.cs",
+              "RelativeDocumentMoniker": "Nexus-Retail-ERP\\Forms\\OwnerDashboard.cs",
+              "ToolTip": "E:\\University\\C# Project\\Nexus-Retail-ERP\\Nexus-Retail-ERP\\Forms\\OwnerDashboard.cs [Design]",
+              "RelativeToolTip": "Nexus-Retail-ERP\\Forms\\OwnerDashboard.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T17:31:05.75Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Bookmark",

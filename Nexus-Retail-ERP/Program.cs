@@ -12,7 +12,7 @@ namespace Nexus_Retail_ERP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SignInPortal());
+            Application.Run(new EmployeeManagementForm());
         }
     }
 }

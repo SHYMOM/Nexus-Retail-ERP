@@ -293,7 +293,7 @@ namespace Nexus_Retail_ERP.Forms
         }
 
         // ==========================================
-        //  FIXED METHOD: LoadBranches
+        //  LoadBranches
         // ==========================================
         private void LoadBranches()
         {

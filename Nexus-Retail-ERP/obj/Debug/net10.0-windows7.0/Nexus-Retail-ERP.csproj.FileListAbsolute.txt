@@ -66,3 +66,5 @@ E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-win
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.ProductMaster.resources
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.BranchManagementForm.resources
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.CategoryManagementForm.resources
+E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.InventoryManagementForm.resources
+E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.EmployeeManagementForm.resources

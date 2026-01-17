@@ -232,6 +232,321 @@ namespace Nexus_Retail_ERP.Data
         }
 
 
+        // =============================================================
+        //  INVENTORY HELPER METHODS
+        // =============================================================
+
+        // 1. Get Missing Products
+        // Retrieves a list of Product Variants that exist in the system 
+        // but are NOT yet tracked in the Inventory table for the selected Branch.
+        public static DataTable GetMissingProducts(int branchID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    v.VariantID, 
+                    v.ProductID,
+                    (p.ProductName + ' [' + v.VariantName + ']') AS FullProductName
+                FROM Variants v
+                INNER JOIN Products p ON v.ProductID = p.ProductID
+                WHERE v.VariantID NOT IN (
+                    SELECT VariantID FROM Inventory WHERE BranchID = @BranchID
+                )
+                ORDER BY p.ProductName, v.VariantName";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BranchID", branchID);
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error (optional)
+                System.Diagnostics.Debug.WriteLine("GetMissingProducts Error: " + ex.Message);
+                return new DataTable(); // Return empty table to prevent crash
+            }
+        }
+
+        // 2. Update Low Stock Limit
+        // Updates the warning threshold for a specific inventory item.
+        public static bool UpdateLowStockLimit(int inventoryID, int newLimit)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = "UPDATE Inventory SET LowStockLimit = @Limit WHERE InventoryID = @ID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Limit", newLimit);
+                        cmd.Parameters.AddWithValue("@ID", inventoryID);
+
+                        int rows = cmd.ExecuteNonQuery();
+                        return rows > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("UpdateLowStockLimit Error: " + ex.Message);
+                return false;
+            }
+        }
+
+        // 3. Register Inventory Item
+        // Adds a new row to the Inventory table to start tracking a specific variant at a specific branch.
+        public static bool RegisterInventoryItem(int productID, int variantID, int branchID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                INSERT INTO Inventory (ProductID, VariantID, BranchID, CurrentStock, LowStockLimit)
+                VALUES (@Prod, @Var, @Branch, 0, 10)"; // Defaults: 0 Stock, 10 Limit
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Prod", productID);
+                        cmd.Parameters.AddWithValue("@Var", variantID);
+                        cmd.Parameters.AddWithValue("@Branch", branchID);
+
+                        int rows = cmd.ExecuteNonQuery();
+                        return rows > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("RegisterInventoryItem Error: " + ex.Message);
+                return false;
+            }
+        }
+
+        public static bool AdjustStock(int inventoryID, int adjustmentQty, string reason, int userID)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // 1. Get Current Stock (For Logging)
+                    int currentStock = 0;
+                    string getStockQuery = "SELECT CurrentStock FROM Inventory WHERE InventoryID = @ID";
+                    using (SqlCommand cmd = new SqlCommand(getStockQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", inventoryID);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null) currentStock = Convert.ToInt32(result);
+                    }
+
+                    // 2. Update Inventory
+                    string updateQuery = @"
+                UPDATE Inventory 
+                SET CurrentStock = CurrentStock + @Qty 
+                WHERE InventoryID = @ID";
+
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@Qty", adjustmentQty);
+                        cmd.Parameters.AddWithValue("@ID", inventoryID);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 3. Log Action in AuditLogs
+                    // Note: We use the existing table structure we created earlier
+                    string logQuery = @"
+                INSERT INTO AuditLogs (UserID, Action, TableName, RecordID, OldValue, NewValue, LogDate)
+                VALUES (@UserID, 'STOCK_ADJUST', 'Inventory', @RecordID, @OldVal, @NewVal, GETDATE())";
+
+                    using (SqlCommand cmd = new SqlCommand(logQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        cmd.Parameters.AddWithValue("@RecordID", inventoryID);
+                        cmd.Parameters.AddWithValue("@OldVal", currentStock.ToString());
+                        cmd.Parameters.AddWithValue("@NewVal", (currentStock + adjustmentQty).ToString());
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 4. Commit Transaction
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // If anything goes wrong, undo changes
+                    transaction.Rollback();
+                    System.Diagnostics.Debug.WriteLine("Stock Update Failed: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        public static DataTable GetInventoryData(int branchID, string searchTerm)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    i.InventoryID,
+                    i.ProductID,
+                    i.VariantID,
+                    i.BranchID,
+                    p.ProductName,
+                    v.VariantName,
+                    b.BranchName,
+                    i.CurrentStock,
+                    i.LowStockLimit
+                FROM Inventory i
+                INNER JOIN Products p ON i.ProductID = p.ProductID
+                INNER JOIN Variants v ON i.VariantID = v.VariantID
+                INNER JOIN Branches b ON i.BranchID = b.BranchID
+                WHERE 
+                    (i.BranchID = @BranchID OR @BranchID = 0) -- 0 means 'All Branches'
+                    AND 
+                    (p.ProductName LIKE @Search OR v.VariantName LIKE @Search)
+                ORDER BY p.ProductName, b.BranchName";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BranchID", branchID);
+                        cmd.Parameters.AddWithValue("@Search", "%" + searchTerm + "%");
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ideally, log this error to a file
+                System.Diagnostics.Debug.WriteLine("Inventory Load Error: " + ex.Message);
+                return new DataTable(); // Return empty table on error to prevent crash
+            }
+        }
+
+
+        // =============================================================
+        //  EMPLOYEE MANAGEMENT METHODS
+        // =============================================================
+
+        // 1. Get All Employees (Searchable)
+        // Fetches list of users joined with their Branch Name
+        public static DataTable GetAllEmployees(string searchTerm)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    u.UserID,
+                    u.FullName,
+                    u.Username,
+                    u.Role,
+                    u.Phone,
+                    b.BranchName,
+                    u.Salary,
+                    u.IsActive,
+                    u.BranchID,
+                    u.ProfileImagePath
+                FROM Users u
+                LEFT JOIN Branches b ON u.BranchID = b.BranchID
+                WHERE 
+                    u.Role != 'Owner' -- Usually we hide the Main Owner from general lists
+                    AND (
+                        u.FullName LIKE @Search OR 
+                        u.Username LIKE @Search OR 
+                        u.Phone LIKE @Search OR
+                        b.BranchName LIKE @Search
+                    )
+                ORDER BY u.IsActive DESC, u.FullName ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Search", "%" + searchTerm + "%");
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("GetAllEmployees Error: " + ex.Message);
+                return new DataTable(); // Return empty table to prevent crash
+            }
+        }
+
+        // 2. Update Employee Details
+        // Updates role, salary, branch, and active status
+        public static bool UpdateEmployee(int userID, string role, decimal salary, int branchID, bool isActive)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                UPDATE Users 
+                SET 
+                    Role = @Role, 
+                    Salary = @Salary, 
+                    BranchID = @BranchID, 
+                    IsActive = @IsActive
+                WHERE UserID = @UserID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Role", role);
+                        cmd.Parameters.AddWithValue("@Salary", salary);
+                        cmd.Parameters.AddWithValue("@BranchID", branchID);
+                        cmd.Parameters.AddWithValue("@IsActive", isActive);
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+
+                        int rows = cmd.ExecuteNonQuery();
+                        return rows > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("UpdateEmployee Error: " + ex.Message);
+                return false;
+            }
+        }
+
+
+
         // =========================================================
         // Authentication
         // =========================================================

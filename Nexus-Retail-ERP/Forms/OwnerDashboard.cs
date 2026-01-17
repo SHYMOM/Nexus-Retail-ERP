@@ -225,7 +225,10 @@ namespace Nexus_Retail_ERP.Forms
 
         private void BtnStockManager_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Stock Manager page will open here.", "Feature Coming Soon");
+            Form mainForm = new InventoryManagementForm();
+            this.Hide();
+            mainForm.FormClosed += (s, args) => this.Close();
+            mainForm.Show();
         }
 
         private void BtnViewReports_Click(object sender, EventArgs e)
