@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nexus-Retail-ERP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31d416752d2ed8f0d6b3d19ce340033db4b297b8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc8d0ea1f1899c1509c15d105f5f8393a00c0677")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nexus-Retail-ERP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nexus-Retail-ERP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

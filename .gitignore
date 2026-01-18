@@ -1,0 +1,12 @@
+# Ignore Visual Studio temporary files
+.vs/
+.vscode/
+.qodo
+
+# Ignore build results
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo

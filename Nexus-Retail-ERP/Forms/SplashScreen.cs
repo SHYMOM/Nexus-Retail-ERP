@@ -1,9 +1,15 @@
+using Microsoft.Data.SqlClient;
+using Nexus_Retail_ERP.Data;
+using Nexus_Retail_ERP.Forms;
+using Nexus_Retail_ERP.Models;
 using System;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Configuration;
 
-namespace Nexus_Retail_ERP
+namespace Nexus_Retail_ERP.Forms
 {
     public partial class SplashScreen : Form
     {
@@ -27,13 +33,52 @@ namespace Nexus_Retail_ERP
             "Ready"
         };
 
+        private readonly string ConnectionString = ConfigurationManager.ConnectionStrings["NexusDB"].ConnectionString;
+
         public SplashScreen()
         {
             InitializeComponent();
+            if (!TestDatabaseConnection())
+            {
+                MessageBox.Show("Cannot connect to database. Please check connection settings.",
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+                return;
+            }
+
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
                          ControlStyles.AllPaintingInWmPaint |
                          ControlStyles.UserPaint, true);
             this.UpdateStyles();
+        }
+
+        private bool TestDatabaseConnection()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ConnectionString))
+                {
+                    MessageBox.Show("Database connection string is not configured in App.config",
+                        "Configuration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    return conn.State == ConnectionState.Open;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database connection failed: {ex.Message}\n\n" +
+                    "Please ensure:\n" +
+                    "1. SQL Server is running\n" +
+                    "2. Database 'NexusERP' exists\n" +
+                    "3. Connection string in App.config is correct",
+                    "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
 
         private void SplashScreen_Load(object sender, EventArgs e)
@@ -130,9 +175,8 @@ namespace Nexus_Retail_ERP
                     fadeOutTimer.Stop();
                     this.Hide();
 
-                    // Transition to Login Form
-
-                    this.Close();
+                    SignInPortal signInPortal = new SignInPortal();
+                    signInPortal.Show();
                 }
             };
 

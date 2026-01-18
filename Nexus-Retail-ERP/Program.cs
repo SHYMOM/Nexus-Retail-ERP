@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using Nexus_Retail_ERP;
+using Nexus_Retail_ERP.Forms;
 
 namespace Nexus_Retail_ERP
 {
@@ -11,7 +12,7 @@ namespace Nexus_Retail_ERP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SplashScreen());
+            Application.Run(new SignInPortal());
         }
     }
 }

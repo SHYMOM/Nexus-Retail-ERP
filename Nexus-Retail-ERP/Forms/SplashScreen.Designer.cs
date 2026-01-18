@@ -1,4 +1,4 @@
-﻿namespace Nexus_Retail_ERP
+﻿namespace Nexus_Retail_ERP.Forms
 {
     partial class SplashScreen
     {
