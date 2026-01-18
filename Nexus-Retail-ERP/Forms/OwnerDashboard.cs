@@ -22,7 +22,7 @@ namespace Nexus_Retail_ERP.Forms
         {
             InitializeComponent();
 
-            if (false) // SessionDetails.CurrentUserRole != "Owner"
+            if (SessionDetails.CurrentUserRole != "Owner")
             {
                 MessageBox.Show("Access Denied! Only Owner can access this dashboard.",
                     "Security Restriction", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -201,7 +201,7 @@ namespace Nexus_Retail_ERP.Forms
 
         private void BtnEmployeeManager_Click(object sender, EventArgs e)
         {
-            Form mainForm = new EmployeeRegistrationPage();
+            Form mainForm = new EmployeeManagementForm();
             this.Hide();
             mainForm.FormClosed += (s, args) => this.Close();
             mainForm.Show();
@@ -238,7 +238,10 @@ namespace Nexus_Retail_ERP.Forms
 
         private void BtnApprovalCenter_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Approval Center page will open here.", "Feature Coming Soon");
+            Form mainForm = new OwnerApprovalPage();
+            this.Hide();
+            mainForm.FormClosed += (s, args) => this.Close();
+            mainForm.Show();
         }
 
         private void PnlTitleBar_MouseDown(object sender, MouseEventArgs e)

@@ -217,12 +217,18 @@ namespace Nexus_Retail_ERP.Forms
             {
                 case "Owner":
                     mainForm = new OwnerDashboard();
+                    this.Hide();
+                    mainForm.FormClosed += (s, args) => this.Close();
+                    mainForm.Show();
                     break;
                 case "Manager":
                     // mainForm = new BranchManagerDashboard();
                     break;
                 case "Cashier":
-                    // mainForm = new CashierDashboard();
+                    mainForm = new POSForm();
+                    this.Hide();
+                    mainForm.FormClosed += (s, args) => this.Close();
+                    mainForm.Show();
                     break;
                 default:
                     MessageBox.Show("Unknown user role. Access denied.",

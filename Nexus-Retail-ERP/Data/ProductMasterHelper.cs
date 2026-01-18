@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Configuration;
+using Nexus_Retail_ERP.Models;
 
 namespace Nexus_Retail_ERP.Data
 {
@@ -10,7 +11,6 @@ namespace Nexus_Retail_ERP.Data
     {
         private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["NexusDB"]?.ConnectionString;
 
-        ///////////////////////////////////////////////////////////////////////ProductMaster////////////////////////////////////////////////////////
         // =============================================
         // PRODUCT MANAGEMENT FUNCTIONS
         // =============================================

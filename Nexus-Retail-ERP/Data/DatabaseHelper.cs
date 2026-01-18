@@ -235,10 +235,6 @@ namespace Nexus_Retail_ERP.Data
         // =============================================================
         //  INVENTORY HELPER METHODS
         // =============================================================
-
-        // 1. Get Missing Products
-        // Retrieves a list of Product Variants that exist in the system 
-        // but are NOT yet tracked in the Inventory table for the selected Branch.
         public static DataTable GetMissingProducts(int branchID)
         {
             try
@@ -275,12 +271,10 @@ namespace Nexus_Retail_ERP.Data
             {
                 // Log error (optional)
                 System.Diagnostics.Debug.WriteLine("GetMissingProducts Error: " + ex.Message);
-                return new DataTable(); // Return empty table to prevent crash
+                return new DataTable();
             }
         }
 
-        // 2. Update Low Stock Limit
-        // Updates the warning threshold for a specific inventory item.
         public static bool UpdateLowStockLimit(int inventoryID, int newLimit)
         {
             try
@@ -307,8 +301,6 @@ namespace Nexus_Retail_ERP.Data
             }
         }
 
-        // 3. Register Inventory Item
-        // Adds a new row to the Inventory table to start tracking a specific variant at a specific branch.
         public static bool RegisterInventoryItem(int productID, int variantID, int branchID)
         {
             try
@@ -347,7 +339,6 @@ namespace Nexus_Retail_ERP.Data
 
                 try
                 {
-                    // 1. Get Current Stock (For Logging)
                     int currentStock = 0;
                     string getStockQuery = "SELECT CurrentStock FROM Inventory WHERE InventoryID = @ID";
                     using (SqlCommand cmd = new SqlCommand(getStockQuery, conn, transaction))
@@ -357,7 +348,6 @@ namespace Nexus_Retail_ERP.Data
                         if (result != null) currentStock = Convert.ToInt32(result);
                     }
 
-                    // 2. Update Inventory
                     string updateQuery = @"
                 UPDATE Inventory 
                 SET CurrentStock = CurrentStock + @Qty 
@@ -370,8 +360,6 @@ namespace Nexus_Retail_ERP.Data
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 3. Log Action in AuditLogs
-                    // Note: We use the existing table structure we created earlier
                     string logQuery = @"
                 INSERT INTO AuditLogs (UserID, Action, TableName, RecordID, OldValue, NewValue, LogDate)
                 VALUES (@UserID, 'STOCK_ADJUST', 'Inventory', @RecordID, @OldVal, @NewVal, GETDATE())";
@@ -385,13 +373,11 @@ namespace Nexus_Retail_ERP.Data
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 4. Commit Transaction
                     transaction.Commit();
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    // If anything goes wrong, undo changes
                     transaction.Rollback();
                     System.Diagnostics.Debug.WriteLine("Stock Update Failed: " + ex.Message);
                     return false;
@@ -443,9 +429,8 @@ namespace Nexus_Retail_ERP.Data
             }
             catch (Exception ex)
             {
-                // Ideally, log this error to a file
                 System.Diagnostics.Debug.WriteLine("Inventory Load Error: " + ex.Message);
-                return new DataTable(); // Return empty table on error to prevent crash
+                return new DataTable();
             }
         }
 
@@ -454,8 +439,6 @@ namespace Nexus_Retail_ERP.Data
         //  EMPLOYEE MANAGEMENT METHODS
         // =============================================================
 
-        // 1. Get All Employees (Searchable)
-        // Fetches list of users joined with their Branch Name
         public static DataTable GetAllEmployees(string searchTerm)
         {
             try
@@ -503,12 +486,10 @@ namespace Nexus_Retail_ERP.Data
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("GetAllEmployees Error: " + ex.Message);
-                return new DataTable(); // Return empty table to prevent crash
+                return new DataTable();
             }
         }
 
-        // 2. Update Employee Details
-        // Updates role, salary, branch, and active status
         public static bool UpdateEmployee(int userID, string role, decimal salary, int branchID, bool isActive)
         {
             try
@@ -544,6 +525,237 @@ namespace Nexus_Retail_ERP.Data
                 return false;
             }
         }
+
+
+
+
+        // =============================================================
+        //  APPROVAL & REQUEST METHODS
+        // =============================================================
+
+        public static DataTable GetStockRequests(string statusFilter)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    r.RequestID,
+                    r.RequestType,
+                    (p.ProductName + ' [' + v.VariantName + ']') AS FullProductName,
+                    r.Quantity,
+                    bFrom.BranchName AS [From Branch],
+                    ISNULL(bTo.BranchName, 'N/A') AS [Source/To Branch],
+                    u.FullName AS [Requested By],
+                    r.RequestDate,
+                    r.Status,
+                    r.FromBranchID,
+                    r.ToBranchID,
+                    r.VariantID
+                FROM StockRequests r
+                INNER JOIN Variants v ON r.VariantID = v.VariantID
+                INNER JOIN Products p ON v.ProductID = p.ProductID
+                INNER JOIN Branches bFrom ON r.FromBranchID = bFrom.BranchID
+                LEFT JOIN Branches bTo ON r.ToBranchID = bTo.BranchID
+                INNER JOIN Users u ON r.RequestedBy = u.UserID
+                WHERE 
+                    (@Status = 'Pending' AND r.Status = 'Pending') 
+                    OR 
+                    (@Status = 'Completed' AND r.Status != 'Pending')
+                ORDER BY r.RequestDate DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Status", statusFilter);
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+            catch { return new DataTable(); }
+        }
+
+        public static bool ProcessStockRequest(int requestID, bool isApproved)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+                try
+                {
+                    string getQuery = "SELECT * FROM StockRequests WHERE RequestID = @ID";
+                    int variantID = 0, qty = 0, requesterBranch = 0, sourceBranch = 0;
+                    string type = "";
+
+                    using (SqlCommand cmd = new SqlCommand(getQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", requestID);
+                        using (SqlDataReader r = cmd.ExecuteReader())
+                        {
+                            if (r.Read())
+                            {
+                                variantID = (int)r["VariantID"];
+                                qty = (int)r["Quantity"];
+                                requesterBranch = (int)r["FromBranchID"];
+
+                                if (r["ToBranchID"] != DBNull.Value)
+                                    sourceBranch = (int)r["ToBranchID"];
+
+                                type = r["RequestType"].ToString();
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                                return false;
+                            }
+                        }
+                    }
+
+                    int productID = 0;
+                    string prodIdQuery = "SELECT ProductID FROM Variants WHERE VariantID = @VarID";
+                    using (SqlCommand cmd = new SqlCommand(prodIdQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@VarID", variantID);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null) productID = Convert.ToInt32(result);
+                    }
+
+                    if (isApproved)
+                    {
+                        if (type == "Restock")
+                        {
+                            AdjustStockInTransaction(conn, transaction, requesterBranch, productID, variantID, qty);
+                        }
+                        else if (type == "Transfer")
+                        {
+                            string stockCheck = "SELECT CurrentStock FROM Inventory WHERE BranchID = @B AND VariantID = @V";
+                            int availableStock = 0;
+                            using (SqlCommand cmd = new SqlCommand(stockCheck, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@B", sourceBranch);
+                                cmd.Parameters.AddWithValue("@V", variantID);
+                                object res = cmd.ExecuteScalar();
+                                if (res != null) availableStock = Convert.ToInt32(res);
+                            }
+
+                            if (availableStock < qty)
+                            {
+                                throw new Exception($"Source Branch only has {availableStock} items. Needed {qty}.");
+                            }
+
+                            // Remove from Sender
+                            AdjustStockInTransaction(conn, transaction, sourceBranch, productID, variantID, -qty);
+
+                            // Add to Requester
+                            AdjustStockInTransaction(conn, transaction, requesterBranch, productID, variantID, qty);
+                        }
+                    }
+
+                    string status = isApproved ? "Approved" : "Rejected";
+
+                    string updateQuery = "UPDATE StockRequests SET Status = @Status WHERE RequestID = @ID";
+
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@Status", status);
+                        cmd.Parameters.AddWithValue("@ID", requestID);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    try { transaction.Rollback(); } catch { }
+                    System.Windows.Forms.MessageBox.Show("Error Details: " + ex.Message, "Database Error");
+                    return false;
+                }
+            }
+        }
+
+        private static void AdjustStockInTransaction(SqlConnection conn, SqlTransaction trans, int branchID, int productID, int variantID, int qty)
+        {
+            string updateSql = "UPDATE Inventory SET CurrentStock = CurrentStock + @Qty WHERE BranchID = @B AND VariantID = @V";
+
+            int rowsAffected = 0;
+            using (SqlCommand cmd = new SqlCommand(updateSql, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("@Qty", qty);
+                cmd.Parameters.AddWithValue("@B", branchID);
+                cmd.Parameters.AddWithValue("@V", variantID);
+                rowsAffected = cmd.ExecuteNonQuery();
+            }
+
+            if (rowsAffected == 0 && qty > 0)
+            {
+                string insertSql = @"
+            INSERT INTO Inventory (ProductID, VariantID, BranchID, CurrentStock, LowStockLimit)
+            VALUES (@P, @V, @B, @Qty, 10)";
+
+                using (SqlCommand cmd = new SqlCommand(insertSql, conn, trans))
+                {
+                    cmd.Parameters.AddWithValue("@P", productID);
+                    cmd.Parameters.AddWithValue("@V", variantID);
+                    cmd.Parameters.AddWithValue("@B", branchID);
+                    cmd.Parameters.AddWithValue("@Qty", qty);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+
+        // =========================================================
+        // POS Helper Methods
+        // =========================================================
+
+        public static string GetBranchNameByID(int branchID)
+        {
+            return POSHelper.GetBranchNameByID(branchID);
+        }
+
+        public static bool AddCustomer(string name, string phone, string email, string address, DateTime? dob)
+        {
+            return POSHelper.AddCustomer(name, phone, email, address, dob);
+        }
+
+        public static bool SendTransferRequest(int fromBranchID, int toBranchID, int variantID, int qty, int userID)
+        {
+            return POSHelper.SendTransferRequest(fromBranchID, toBranchID, variantID, qty, userID);
+        }
+
+        public static DataTable GetPOSProducts(int branchID, string search = "")
+        {
+            return POSHelper.GetPOSProducts(branchID, search);
+        }
+
+        public static DataTable GetStockAvailability(int variantID, int excludeBranchID)
+        {
+            return POSHelper.GetStockAvailability(variantID, excludeBranchID);
+        }
+
+        public static bool RequestStockTransfer(int variantID, int branchID, int userID)
+        {
+            return POSHelper.RequestStockTransfer(variantID, branchID, userID);
+        }
+
+        public static bool SaveTransaction(int branchID, int userID, int? customerID, decimal totalAmount, decimal discountAmount, int pointsUsed, decimal finalPaid, decimal totalTax, DataTable cartItems, string payMethod, string refNo, out string invoiceNo)
+        {
+            return POSHelper.SaveTransaction(branchID, userID, customerID, totalAmount, discountAmount, pointsUsed, finalPaid, totalTax, cartItems, payMethod, refNo, out invoiceNo);
+        }
+
+        public static DataRow GetCustomerByPhone(string phone)
+        {
+            return POSHelper.GetCustomerByPhone(phone);
+        }
+
 
 
 
@@ -622,7 +834,7 @@ namespace Nexus_Retail_ERP.Data
 
         public static List<string> GetAvailableRoles()
         {
-            return new List<string> { "Owner", "Manager", "Cashier" };
+            return new List<string> { "Owner", "Manager", "Cashier", "Employee" };
         }
 
 
@@ -672,6 +884,28 @@ namespace Nexus_Retail_ERP.Data
             }
         }
 
+        public static int GetBranchIDByUserID(int userID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT BranchID FROM Users WHERE UserID = @UserID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        object result = cmd.ExecuteScalar();
+                        return result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                    }
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
 
         private static int GetLastInsertedUserID(SqlConnection conn)
         {
@@ -916,80 +1150,6 @@ namespace Nexus_Retail_ERP.Data
             }
         }
 
-
     }
 
-
-    /// //////////////////////////////////////TEmp Model Class//////////////////////
-
-    public class BranchInfo
-    {
-        public int BranchID { get; set; }
-        public string BranchName { get; set; }
-        public string Location { get; set; }
-        public string Phone { get; set; }
-        public bool IsActive { get; set; }
-
-        public override string ToString()
-        {
-            return $"{BranchName} - {Location}";
-        }
-    }
-
-    public class AuthResult
-    {
-        public bool IsAuthenticated { get; set; }
-        public int UserID { get; set; }
-        public string Role { get; set; }
-        public string FullName { get; set; }
-        public int BranchID { get; set; }
-        public string BranchName { get; set; }
-    }
-
-
-    public class Product
-    {
-        public int ProductID { get; set; }
-        public string ProductName { get; set; }
-        public string Description { get; set; }
-        public string ProductImagePath { get; set; }
-        public decimal TaxRate { get; set; }
-        public bool IsActive { get; set; }
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
-        public int VariantCount { get; set; }
-        public List<Variant> Variants { get; set; }
-    }
-
-    public class Variant
-    {
-        public int VariantID { get; set; }
-        public string VariantName { get; set; }
-        public string UOM { get; set; }
-        public decimal CostPrice { get; set; }
-        public decimal SalesPrice { get; set; }
-        public string SKU { get; set; }
-        public string VariantImagePath { get; set; }
-        public int ProductID { get; set; }
-        public int TotalStock { get; set; }
-    }
-
-    public class Category
-    {
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
-    }
-
-    public class AuditLog
-    {
-        public int LogID { get; set; }
-        public int UserID { get; set; }
-        public string Username { get; set; }
-        public string Action { get; set; }
-        public string TableName { get; set; }
-        public int? RecordID { get; set; }
-        public string OldValue { get; set; }
-        public string NewValue { get; set; }
-        public DateTime LogDate { get; set; }
-    }
 }

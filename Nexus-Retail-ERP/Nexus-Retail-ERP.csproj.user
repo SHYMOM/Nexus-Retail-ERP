@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="Dialogs\AddCustomerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\PaymentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\StockRequestDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\BranchManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -16,7 +25,13 @@
     <Compile Update="Forms\InventoryManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\OwnerApprovalPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\OwnerDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\POSForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\ProductMaster.cs">
