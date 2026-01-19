@@ -222,7 +222,7 @@ namespace Nexus_Retail_ERP.Forms
                     mainForm.Show();
                     break;
                 case "Manager":
-                    // mainForm = new BranchManagerDashboard();
+                    mainForm = new BranchManagerDashboard();
                     break;
                 case "Cashier":
                     mainForm = new POSForm();

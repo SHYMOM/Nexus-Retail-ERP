@@ -70,3 +70,6 @@ E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-win
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.EmployeeManagementForm.resources
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.OwnerApprovalPage.resources
 E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.POSForm.resources
+E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.BranchManagerDashboard.resources
+E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Forms.KioskDashboard.resources
+E:\University\C# Project\Nexus-Retail-ERP\Nexus-Retail-ERP\obj\Debug\net10.0-windows7.0\Nexus_Retail_ERP.Dialogs.AddCustomerDialog.resources

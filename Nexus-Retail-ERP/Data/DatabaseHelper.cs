@@ -81,6 +81,18 @@ namespace Nexus_Retail_ERP.Data
             return branches;
         }
 
+        public static DataTable GetBranches()
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlDataAdapter da = new SqlDataAdapter("SELECT BranchID, BranchName FROM Branches WHERE IsActive = 1", conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+
         public static bool DeleteBranch(int branchID)
         {
             try
@@ -726,7 +738,7 @@ namespace Nexus_Retail_ERP.Data
             return POSHelper.AddCustomer(name, phone, email, address, dob);
         }
 
-        public static bool SendTransferRequest(int fromBranchID, int toBranchID, int variantID, int qty, int userID)
+        public static bool SendTransferRequest(int? fromBranchID, int toBranchID, int variantID, int qty, int userID)
         {
             return POSHelper.SendTransferRequest(fromBranchID, toBranchID, variantID, qty, userID);
         }
@@ -756,7 +768,44 @@ namespace Nexus_Retail_ERP.Data
             return POSHelper.GetCustomerByPhone(phone);
         }
 
+        // =========================================================
+        // Branch Manager Helper
+        // =========================================================
 
+        public static DataTable GetAllTransferHistory(int myBranchID)
+        {
+            return BranchManagerHelper.GetAllTransferHistory(myBranchID);
+        }
+
+        public static DataTable GetIncomingTransferRequests(int myBranchID)
+        {
+            return BranchManagerHelper.GetIncomingTransferRequests(myBranchID);
+        }
+
+        public static void GetBranchStats(int branchID, out decimal todaySales, out int lowStockCount, out int pendingRequests)
+        {
+            BranchManagerHelper.GetBranchStats(branchID, out todaySales, out lowStockCount, out pendingRequests);
+        }
+
+        public static DataTable GetBranchStaff(int myBranchID)
+        {
+            return BranchManagerHelper.GetBranchStaff(myBranchID);
+        }
+
+        public static DataTable GetBranchTransactions(int myBranchID)
+        {
+            return BranchManagerHelper.GetBranchTransactions(myBranchID);
+        }
+
+        public static bool ProcessTransferRequest(int requestID, bool isApproved, int approverID)
+        {
+            return BranchManagerHelper.ProcessTransferRequest(requestID, isApproved, approverID);
+        }
+
+        public static DataTable GetBranchTransactions(int branchID, int limit = 30)
+        {
+            return BranchManagerHelper.GetBranchTransactions(branchID, limit);
+        }
 
 
         // =========================================================
@@ -1148,6 +1197,27 @@ namespace Nexus_Retail_ERP.Data
             {
 
             }
+        }
+
+
+        // =============================================================
+        //  KIOSK SPECIFIC METHODS
+        // =============================================================
+
+
+        public static DataTable GetCategories()
+        {
+            return KioskHelper.GetCategories();
+        }
+
+        public static DataTable GetKioskProducts(string searchText, int categoryID, string sortOrder, int branchID)
+        {
+            return KioskHelper.GetKioskProducts(searchText, categoryID, sortOrder, branchID);
+        }
+
+        public static DataTable GetProductVariants(int productID, int branchID)
+        {
+            return KioskHelper.GetProductVariants(productID, branchID);
         }
 
     }
