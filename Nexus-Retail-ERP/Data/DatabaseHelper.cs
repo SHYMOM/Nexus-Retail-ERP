@@ -81,6 +81,18 @@ namespace Nexus_Retail_ERP.Data
             return branches;
         }
 
+        public static DataTable GetBranches()
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlDataAdapter da = new SqlDataAdapter("SELECT BranchID, BranchName FROM Branches WHERE IsActive = 1", conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
+        }
+
         public static bool DeleteBranch(int branchID)
         {
             try
@@ -269,7 +281,7 @@ namespace Nexus_Retail_ERP.Data
             }
             catch (Exception ex)
             {
-                // Log error (optional)
+                // Log error
                 System.Diagnostics.Debug.WriteLine("GetMissingProducts Error: " + ex.Message);
                 return new DataTable();
             }
@@ -726,7 +738,7 @@ namespace Nexus_Retail_ERP.Data
             return POSHelper.AddCustomer(name, phone, email, address, dob);
         }
 
-        public static bool SendTransferRequest(int fromBranchID, int toBranchID, int variantID, int qty, int userID)
+        public static bool SendTransferRequest(int? fromBranchID, int toBranchID, int variantID, int qty, int userID)
         {
             return POSHelper.SendTransferRequest(fromBranchID, toBranchID, variantID, qty, userID);
         }
@@ -756,7 +768,44 @@ namespace Nexus_Retail_ERP.Data
             return POSHelper.GetCustomerByPhone(phone);
         }
 
+        // =========================================================
+        // Branch Manager Helper
+        // =========================================================
 
+        public static DataTable GetAllTransferHistory(int myBranchID)
+        {
+            return BranchManagerHelper.GetAllTransferHistory(myBranchID);
+        }
+
+        public static DataTable GetIncomingTransferRequests(int myBranchID)
+        {
+            return BranchManagerHelper.GetIncomingTransferRequests(myBranchID);
+        }
+
+        public static void GetBranchStats(int branchID, out decimal todaySales, out int lowStockCount, out int pendingRequests)
+        {
+            BranchManagerHelper.GetBranchStats(branchID, out todaySales, out lowStockCount, out pendingRequests);
+        }
+
+        public static DataTable GetBranchStaff(int myBranchID)
+        {
+            return BranchManagerHelper.GetBranchStaff(myBranchID);
+        }
+
+        public static DataTable GetBranchTransactions(int myBranchID)
+        {
+            return BranchManagerHelper.GetBranchTransactions(myBranchID);
+        }
+
+        public static bool ProcessTransferRequest(int requestID, bool isApproved, int approverID)
+        {
+            return BranchManagerHelper.ProcessTransferRequest(requestID, isApproved, approverID);
+        }
+
+        public static DataTable GetBranchTransactions(int branchID, int limit = 30)
+        {
+            return BranchManagerHelper.GetBranchTransactions(branchID, limit);
+        }
 
 
         // =========================================================
@@ -813,6 +862,36 @@ namespace Nexus_Retail_ERP.Data
             catch (Exception ex)
             {
                 throw new Exception($"Authentication failed: {ex.Message}", ex);
+            }
+        }
+
+        public static bool ResetPassword(string username, string plainPassword)
+        {
+            try
+            {
+                string hashedPassword = ComputeSHA256Hash(plainPassword);
+
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    string query = "UPDATE Users SET PasswordHash = @Hash WHERE Username = @User";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Hash", hashedPassword);
+                        cmd.Parameters.AddWithValue("@User", username);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                return false;
             }
         }
 
@@ -1148,6 +1227,96 @@ namespace Nexus_Retail_ERP.Data
             {
 
             }
+        }
+
+
+        // =============================================================
+        //  KIOSK SPECIFIC METHODS
+        // =============================================================
+
+
+        public static DataTable GetCategories()
+        {
+            return KioskHelper.GetCategories();
+        }
+
+        public static DataTable GetKioskProducts(string searchText, int categoryID, string sortOrder, int branchID)
+        {
+            return KioskHelper.GetKioskProducts(searchText, categoryID, sortOrder, branchID);
+        }
+
+        public static DataTable GetProductVariants(int productID, int branchID)
+        {
+            return KioskHelper.GetProductVariants(productID, branchID);
+        }
+
+
+        // =============================================================
+        //  TELEGRAM NOTIFICATION TRIGGERS
+        // =============================================================
+
+        public static void NotifyOwner_Login(string username, string role, string branchName)
+        {
+            string body = $"👤 *User:* {username}\n" +
+                          $"🛡 *Role:* {role}\n" +
+                          $"🏢 *Branch:* {branchName}\n" +
+                          $"🕒 *Time:* {DateTime.Now:hh:mm tt}";
+
+            TelegramNotify.SendLog("=======🔐 NEW LOGIN DETECTED=======", body);
+        }
+
+        public static void NotifyOwner_StockRequest(string type, string fromBranch, string toBranch, string product, int qty, string user)
+        {
+            string icon = type == "Restock" ? "🆘" : "🚚";
+
+            string body = $"{icon} *Type:* {type} Request\n" +
+                          $"📦 *Item:* {product}\n" +
+                          $"🔢 *Qty:* {qty}\n" +
+                          $"--------------------------------\n" +
+                          $"FROM: {fromBranch}\n" +
+                          $"TO: {toBranch}\n" +
+                          $"👤 *Req By:* {user}";
+
+            TelegramNotify.SendLog("=======📝 STOCK REQUEST ALERT=======", body);
+        }
+
+
+        public static string GetProductNameByID(int varID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT p.ProductName + ' (' + v.VariantName + ')' FROM Variants v JOIN Products p ON v.ProductID = p.ProductID WHERE v.VariantID = @ID";
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", varID);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? result.ToString() : "Unknown Item";
+                    }
+                }
+            }
+            catch { return "Unknown Item"; }
+        }
+
+        public static string GetUserNameByID(int userID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT Username FROM Users WHERE UserID = @ID";
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", userID);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? result.ToString() : "Unknown User";
+                    }
+                }
+            }
+            catch { return "Unknown User"; }
         }
 
     }

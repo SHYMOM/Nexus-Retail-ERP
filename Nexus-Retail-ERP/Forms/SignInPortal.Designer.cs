@@ -22,6 +22,7 @@
             lblBrandName = new Label();
             picLogo = new PictureBox();
             pnlRight = new Panel();
+            lblForgetPassword = new Label();
             lblSuccessMessage = new Label();
             lblBranch = new Label();
             pnlBranch = new Panel();
@@ -97,6 +98,7 @@
             // pnlRight
             // 
             pnlRight.BackColor = Color.WhiteSmoke;
+            pnlRight.Controls.Add(lblForgetPassword);
             pnlRight.Controls.Add(lblSuccessMessage);
             pnlRight.Controls.Add(lblBranch);
             pnlRight.Controls.Add(pnlBranch);
@@ -115,6 +117,20 @@
             pnlRight.Name = "pnlRight";
             pnlRight.Size = new Size(687, 688);
             pnlRight.TabIndex = 1;
+            // 
+            // lblForgetPassword
+            // 
+            lblForgetPassword.AutoSize = true;
+            lblForgetPassword.Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblForgetPassword.ForeColor = Color.LightSlateGray;
+            lblForgetPassword.Location = new Point(119, 405);
+            lblForgetPassword.Margin = new Padding(4, 0, 4, 0);
+            lblForgetPassword.Name = "lblForgetPassword";
+            lblForgetPassword.Size = new Size(146, 20);
+            lblForgetPassword.TabIndex = 17;
+            lblForgetPassword.Text = "Forget Password ?";
+            lblForgetPassword.Visible = true;
+            lblForgetPassword.Click += lblForgetPassword_Click;
             // 
             // lblSuccessMessage
             // 
@@ -343,5 +359,6 @@
         private Panel pnlBranch;
         private ComboBox cmbBranch;
         private Label lblSuccessMessage;
+        private Label lblForgetPassword;
     }
 }

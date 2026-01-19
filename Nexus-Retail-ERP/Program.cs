@@ -10,9 +10,10 @@ namespace Nexus_Retail_ERP
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SignInPortal());
+            Application.Run(new KioskDashboard());
         }
     }
 }

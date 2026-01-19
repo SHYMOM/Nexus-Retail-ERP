@@ -64,26 +64,69 @@ namespace Nexus_Retail_ERP.Data
             }
         }
 
-        public static bool SendTransferRequest(int fromBranchID, int toBranchID, int variantID, int qty, int userID)
+        /* public static bool SendTransferRequest(int fromBranchID, int toBranchID, int variantID, int qty, int userID)
+         {
+             try
+             {
+                 using (SqlConnection conn = new SqlConnection(ConnectionString))
+                 {
+                     conn.Open();
+                     string query = @"
+                 INSERT INTO StockRequests 
+                 (RequestType, Quantity, Status, RequestDate, FromBranchID, ToBranchID, VariantID, RequestedBy)
+                 VALUES 
+                 ('Transfer', @Qty, 'Pending', GETDATE(), @FromBranch, @ToBranch, @Var, @User)";
+
+                     using (SqlCommand cmd = new SqlCommand(query, conn))
+                     {
+                         cmd.Parameters.AddWithValue("@Qty", qty);
+                         cmd.Parameters.AddWithValue("@FromBranch", fromBranchID);
+                         cmd.Parameters.AddWithValue("@ToBranch", toBranchID);
+                         cmd.Parameters.AddWithValue("@Var", variantID);
+                         cmd.Parameters.AddWithValue("@User", userID);
+                         cmd.ExecuteNonQuery();
+                     }
+                     return true;
+                 }
+             }
+             catch (Exception ex)
+             {
+                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                 return false;
+             }
+         }
+
+        public static bool SendTransferRequest(int fromBranch, int? toBranch, int varID, int qty, int userID)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
+                    string type = (toBranch == null || toBranch == 0) ? "Restock" : "Transfer";
+
                     string query = @"
                 INSERT INTO StockRequests 
-                (RequestType, Quantity, Status, RequestDate, FromBranchID, ToBranchID, VariantID, RequestedBy)
+                (RequestType, Quantity, Status, RequestDate, FromBranchID, ToBranchID, VariantID, RequestedBy) 
                 VALUES 
-                ('Transfer', @Qty, 'Pending', GETDATE(), @FromBranch, @ToBranch, @Var, @User)";
+                (@Type, @Qty, 'Pending', GETDATE(), @From, @To, @Var, @User)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("@Type", type);
                         cmd.Parameters.AddWithValue("@Qty", qty);
-                        cmd.Parameters.AddWithValue("@FromBranch", fromBranchID);
-                        cmd.Parameters.AddWithValue("@ToBranch", toBranchID);
-                        cmd.Parameters.AddWithValue("@Var", variantID);
+                        cmd.Parameters.AddWithValue("@From", fromBranch);
+                        if (toBranch == null || toBranch == 0)
+                        {
+                            cmd.Parameters.AddWithValue("@To", DBNull.Value);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@To", toBranch);
+                        }
+                        cmd.Parameters.AddWithValue("@Var", varID);
                         cmd.Parameters.AddWithValue("@User", userID);
+
                         cmd.ExecuteNonQuery();
                     }
                     return true;
@@ -91,8 +134,61 @@ namespace Nexus_Retail_ERP.Data
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine("Request Error: " + ex.Message);
                 return false;
+            }
+        }
+        */
+
+        public static bool SendTransferRequest(int? sourceBranchID, int destBranchID, int varID, int qty, int userID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    string type = (sourceBranchID == null || sourceBranchID == 0) ? "Restock" : "Transfer";
+
+                    string query = @"
+                INSERT INTO StockRequests 
+                (RequestType, Quantity, Status, RequestDate, FromBranchID, ToBranchID, VariantID, RequestedBy) 
+                VALUES 
+                (@Type, @Qty, 'Pending', GETDATE(), @From, @To, @Var, @User)";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Type", type);
+                        cmd.Parameters.AddWithValue("@Qty", qty);
+
+                        if (sourceBranchID == null || sourceBranchID == 0)
+                        {
+                            cmd.Parameters.AddWithValue("@From", DBNull.Value);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@From", sourceBranchID);
+                        }
+
+                        cmd.Parameters.AddWithValue("@To", destBranchID);
+                        cmd.Parameters.AddWithValue("@Var", varID);
+                        cmd.Parameters.AddWithValue("@User", userID);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    string fromBranch = (sourceBranchID == null || sourceBranchID == 0) ? "HEAD OFFICE" : $"Branch #{sourceBranchID}";
+                    string toBranch = $"Branch #{destBranchID}";
+
+                    string prodName = DatabaseHelper.GetProductNameByID(varID);
+                    string userName = DatabaseHelper.GetUserNameByID(userID);
+
+                    DatabaseHelper.NotifyOwner_StockRequest(type, fromBranch, toBranch, prodName, qty, userName);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DB Error: " + ex.Message);
             }
         }
 

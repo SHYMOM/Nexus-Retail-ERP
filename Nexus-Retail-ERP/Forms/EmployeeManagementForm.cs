@@ -157,7 +157,13 @@ namespace Nexus_Retail_ERP.Forms
         // =========================================================
         private void SetupEventHandlers()
         {
-            btnClose.Click += (s, e) => this.Close();
+            btnClose.Click += (s, e) =>
+            {
+                Form mainForm = new OwnerDashboard();
+                this.Hide();
+                mainForm.FormClosed += (s, args) => this.Close();
+                mainForm.Show();
+            };
 
             txtSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) RefreshEmployeeList(); };
             btnSearch.Click += (s, e) => RefreshEmployeeList();
