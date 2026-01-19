@@ -283,5 +283,13 @@ namespace Nexus_Retail_ERP.Forms
                 form.ShowDialog();
             }
         }
+
+        private void lblKioskEnter_Click(object sender, EventArgs e)
+        {
+            Form mainForm = new KioskDashboard();
+            this.Hide();
+            mainForm.FormClosed += (s, args) => this.Close();
+            mainForm.Show();
+        }
     }
 }
