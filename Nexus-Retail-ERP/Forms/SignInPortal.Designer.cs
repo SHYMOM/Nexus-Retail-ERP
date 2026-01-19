@@ -38,6 +38,7 @@
             txtUsername = new TextBox();
             lblUser = new Label();
             lblTitle = new Label();
+            lblKioskEnter = new Label();
             pnlLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             pnlRight.SuspendLayout();
@@ -49,6 +50,7 @@
             // pnlLeft
             // 
             pnlLeft.BackColor = Color.FromArgb(64, 64, 64);
+            pnlLeft.Controls.Add(lblKioskEnter);
             pnlLeft.Controls.Add(lblTagline);
             pnlLeft.Controls.Add(lblBrandName);
             pnlLeft.Controls.Add(picLogo);
@@ -129,7 +131,6 @@
             lblForgetPassword.Size = new Size(146, 20);
             lblForgetPassword.TabIndex = 17;
             lblForgetPassword.Text = "Forget Password ?";
-            lblForgetPassword.Visible = true;
             lblForgetPassword.Click += lblForgetPassword_Click;
             // 
             // lblSuccessMessage
@@ -311,6 +312,19 @@
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Sign in to your account";
             // 
+            // lblKioskEnter
+            // 
+            lblKioskEnter.AutoSize = true;
+            lblKioskEnter.Font = new Font("Segoe UI Symbol", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblKioskEnter.ForeColor = Color.LightSlateGray;
+            lblKioskEnter.Location = new Point(13, 659);
+            lblKioskEnter.Margin = new Padding(4, 0, 4, 0);
+            lblKioskEnter.Name = "lblKioskEnter";
+            lblKioskEnter.Size = new Size(141, 20);
+            lblKioskEnter.TabIndex = 18;
+            lblKioskEnter.Text = "Enter Kiosk Mode";
+            lblKioskEnter.Click += lblKioskEnter_Click;
+            // 
             // SignInPortal
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
@@ -360,5 +374,6 @@
         private ComboBox cmbBranch;
         private Label lblSuccessMessage;
         private Label lblForgetPassword;
+        private Label lblKioskEnter;
     }
 }
