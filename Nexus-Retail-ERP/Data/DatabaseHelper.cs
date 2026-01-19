@@ -281,7 +281,7 @@ namespace Nexus_Retail_ERP.Data
             }
             catch (Exception ex)
             {
-                // Log error (optional)
+                // Log error
                 System.Diagnostics.Debug.WriteLine("GetMissingProducts Error: " + ex.Message);
                 return new DataTable();
             }
@@ -865,6 +865,36 @@ namespace Nexus_Retail_ERP.Data
             }
         }
 
+        public static bool ResetPassword(string username, string plainPassword)
+        {
+            try
+            {
+                string hashedPassword = ComputeSHA256Hash(plainPassword);
+
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    string query = "UPDATE Users SET PasswordHash = @Hash WHERE Username = @User";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Hash", hashedPassword);
+                        cmd.Parameters.AddWithValue("@User", username);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                return false;
+            }
+        }
+
         public static string ComputeSHA256Hash(string input)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -1218,6 +1248,75 @@ namespace Nexus_Retail_ERP.Data
         public static DataTable GetProductVariants(int productID, int branchID)
         {
             return KioskHelper.GetProductVariants(productID, branchID);
+        }
+
+
+        // =============================================================
+        //  TELEGRAM NOTIFICATION TRIGGERS
+        // =============================================================
+
+        public static void NotifyOwner_Login(string username, string role, string branchName)
+        {
+            string body = $"👤 *User:* {username}\n" +
+                          $"🛡 *Role:* {role}\n" +
+                          $"🏢 *Branch:* {branchName}\n" +
+                          $"🕒 *Time:* {DateTime.Now:hh:mm tt}";
+
+            TelegramNotify.SendLog("=======🔐 NEW LOGIN DETECTED=======", body);
+        }
+
+        public static void NotifyOwner_StockRequest(string type, string fromBranch, string toBranch, string product, int qty, string user)
+        {
+            string icon = type == "Restock" ? "🆘" : "🚚";
+
+            string body = $"{icon} *Type:* {type} Request\n" +
+                          $"📦 *Item:* {product}\n" +
+                          $"🔢 *Qty:* {qty}\n" +
+                          $"--------------------------------\n" +
+                          $"FROM: {fromBranch}\n" +
+                          $"TO: {toBranch}\n" +
+                          $"👤 *Req By:* {user}";
+
+            TelegramNotify.SendLog("=======📝 STOCK REQUEST ALERT=======", body);
+        }
+
+
+        public static string GetProductNameByID(int varID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT p.ProductName + ' (' + v.VariantName + ')' FROM Variants v JOIN Products p ON v.ProductID = p.ProductID WHERE v.VariantID = @ID";
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", varID);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? result.ToString() : "Unknown Item";
+                    }
+                }
+            }
+            catch { return "Unknown Item"; }
+        }
+
+        public static string GetUserNameByID(int userID)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    string sql = "SELECT Username FROM Users WHERE UserID = @ID";
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", userID);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? result.ToString() : "Unknown User";
+                    }
+                }
+            }
+            catch { return "Unknown User"; }
         }
 
     }

@@ -81,6 +81,7 @@
             btnClose.Size = new Size(50, 50);
             btnClose.TabIndex = 1;
             btnClose.Text = "X";
+            btnClose.Click += btnClose_Click;
             // 
             // layoutMain
             // 

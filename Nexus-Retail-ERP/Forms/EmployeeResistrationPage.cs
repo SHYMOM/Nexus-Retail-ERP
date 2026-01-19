@@ -240,7 +240,7 @@ namespace Nexus_Retail_ERP.Forms
                 txtPhone.TextChanged += (s, e) =>
                 {
                     string phone = txtPhone.Text;
-                    if (!string.IsNullOrWhiteSpace(phone) && phone.Length >= 10)
+                    if (ValidationHelper.IsValidPhone(phone))
                     {
                         if (!DatabaseHelper.IsPhoneAvailable(phone))
                         {

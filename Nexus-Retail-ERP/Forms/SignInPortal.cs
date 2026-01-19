@@ -191,6 +191,7 @@ namespace Nexus_Retail_ERP.Forms
                     SessionDetails.CurrentBranchID = authResult.Role == "Owner" ? selectedBranchID : authResult.BranchID;
                     SessionDetails.CurrentBranchName = authResult.Role == "Owner" ? selectedBranchName : authResult.BranchName;
 
+                    DatabaseHelper.NotifyOwner_Login(username, SessionDetails.CurrentUserRole, SessionDetails.CurrentBranchName);
                     DatabaseHelper.UpdateLastLogin(authResult.UserID);
 
                     OpenMainDashboard();
@@ -273,6 +274,14 @@ namespace Nexus_Retail_ERP.Forms
             int offset = (shakeTicks % 2 == 0) ? 5 : -5;
             this.Location = new Point(originalLoc.X + offset, originalLoc.Y);
             shakeTicks++;
+        }
+
+        private void lblForgetPassword_Click(object sender, EventArgs e)
+        {
+            using (var form = new ChangePasswordForm())
+            {
+                form.ShowDialog();
+            }
         }
     }
 }
