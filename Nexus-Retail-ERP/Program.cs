@@ -13,7 +13,7 @@ namespace Nexus_Retail_ERP
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new KioskDashboard());
+            Application.Run(new SplashScreen());
         }
     }
 }
