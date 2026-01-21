@@ -1,107 +1,101 @@
-# Enterprise-Resource-Planning ERP 🛒
+# Nexus Retail ERP
 
-![Status](https://img.shields.io/badge/Status-Development-yellow)
-![Platform](https://img.shields.io/badge/Platform-Windows_Forms-blue)
-![Database](https://img.shields.io/badge/Database-SQL_Server-red)
-![Language](https://img.shields.io/badge/Language-C%23_.NET-purple)
+**Nexus Retail ERP** is a comprehensive desktop-based Enterprise Resource Planning system designed for multi-branch retail businesses. Unlike standalone POS systems, Nexus ERP connects multiple store locations to a central Head Office, enabling real-time inventory synchronization, inter-branch stock transfers, and centralized management.
 
-**Enterprise-Resource-Planning** is a centralized, multi-branch Enterprise Resource Planning system designed for large-scale retail businesses. Unlike standard POS software, Nexus synchronizes inventory, sales, and staff management across a Head Office and multiple satellite branches in real-time.
+Built with **C# (Windows Forms)** and **Microsoft SQL Server**, this project addresses the complex logistical challenges of retail chains, such as balancing stock between outlets and securing sensitive data with SHA-256 encryption.
 
 ---
 
-## 🚀 Project Overview
+## 🚀 Key Features
 
-The primary goal of Enterprise-Resource-Planning is to solve the problem of fragmented data in retail chains. It features a "God Mode" administration panel for business owners and a streamlined Point of Sale (POS) interface for branch staff.
+### 1. 👑 Owner (Super Admin)
+* **Global Dashboard:** View real-time revenue, sales, and inventory data across all branches.
+* **Telegram Integration:** Receive instant alerts on your phone for staff logins, critical stock requests, and suspicious activity.
+* **Audit Logging:** Track every user action (login, sale, edit) with timestamps and IP details.
+* **Master Control:** Approve complex stock movements and manage employee access roles.
 
-**Key Highlights:**
+### 2. 🏢 Branch Manager
+* **Stock Logistics:**
+    * **Request Restock:** Order new inventory from the Head Office.
+    * **Inter-Branch Transfer:** Request specific items (e.g., "Mouse Black") directly from other branches (e.g., "Uttara Outlet") if local stock is low.
+* **Approval System:** Review and approve/reject incoming stock requests from other branches.
+* **Low Stock Alerts:** Visual indicators (Red/Orange highlights) when inventory dips below the defined limit.
 
-- **Centralized Database:** A single SQL Server instance manages data for all branches.
-- **Inter-Branch Synchronization:** Check stock levels at _other_ branches directly from the POS.
-- **Loyalty System:** Automated customer account creation and discount logic based on phone numbers.
-- **Digital Indent Protocol:** A strict "Request & Approve" workflow for moving stock between branches.
+### 3. 🛒 Cashier (POS)
+* **Point of Sale:** Fast, keyboard-friendly interface for processing sales (Cash/Card/Mobile).
+* **Stock Validation:** Prevents adding items to the cart if local stock is insufficient.
+* **Transfer Requests:** If an item is out of stock, the cashier can initiate a transfer request on behalf of the customer directly from the POS.
+* **Invoice Generation:** Auto-generates unique invoices and financial records.
 
----
-
-## 📸 Screenshots
-
-_(screenshots)_
-
-|                        **Login Portal**                         |                          **Admin Dashboard**                           |                      **POS Interface**                      |
-| :-------------------------------------------------------------: | :--------------------------------------------------------------------: | :---------------------------------------------------------: |
-| ![Login](https://via.placeholder.com/250x150?text=Login+Screen) | ![Dashboard](https://via.placeholder.com/250x150?text=Admin+Dashboard) | ![POS](https://via.placeholder.com/250x150?text=POS+Screen) |
-
----
-
-## 🛠 Tech Stack
-
-- **Frontend:** C# Windows Forms (WinForms) with .NET Framework.
-- **Backend:** Microsoft SQL Server.
-- **Architecture:** Layered Architecture (UI, Business Logic, Data Access).
-- **Reporting:** Microsoft RDLC Reports / MS Chart Controls.
+### 4. 🖥️ Customer Kiosk Module
+* **Self-Service Browsing:** A touch-friendly, full-screen interface for customers to explore products.
+* **Location-Aware Stock:**
+    * Shows **"In Stock"** if available at the current branch.
+    * Shows **"Available at [Branch Name]"** if out of stock locally.
+* **Security:** Runs in a locked full-screen mode. Exiting requires a specific "Hidden Action" (Double-click Title) and an Admin PIN.
 
 ---
 
-## ✨ Key Features
+## 🛠️ Technology Stack
 
-### 1. Head Office (Super Admin)
-
-- **Global Dashboard:** Real-time view of total sales, profit, and low-stock alerts across the company.
-- **Master Product Entry:** Create products and manage variants (Sizes/Colors) centrally.
-- **Approval Hub:** Review and approve/reject stock transfer requests from Branch Managers.
-
-### 2. Branch Operations (Manager)
-
-- **Stock Requisition:** Send digital "Indents" (requests) to Head Office for inventory replenishment.
-- **Staff Management:** Manage cashier accounts and track shift attendance.
-- **Expense Tracking:** Log daily operational costs (utilities, maintenance).
-
-### 3. Point of Sale (Cashier)
-
-- **Smart Billing:** Barcode-compatible interface with automated tax calculation.
-- **Loyalty Integration:** Enter a phone number to instantly fetch customer details and apply "Regular Customer" discounts.
-- **Global Search:** "Out of stock here? Let me check our other branch for you."
-
-### 4. Public Kiosk (Customer View)
-
-- **Price Checker:** A simple, read-only interface for customers to scan items and view prices.
+* **Language:** C# (.NET Core / .NET Framework)
+* **Framework:** Windows Forms (WinForms)
+* **Database:** Microsoft SQL Server (2019/2022)
+* **Security:** SHA-256 Password Hashing
+* **Notifications:** Telegram Bot API
+* **Reporting:** Microsoft RDLC / DataGridView Exports
 
 ---
 
-## 💾 Database Schema (Brief)
+## 🗄️ Database Structure
 
-The system is built on a relational SQL model:
-
-- `Users` (Linked to `Branches`)
-- `Inventory` (Links `Products` + `Branches` + `Variants`)
-- `Transactions` (Master) & `TransactionDetails` (Child)
-- `StockRequests` (Tracks status: Pending -> Approved -> Completed)
+The system uses a highly normalized Relational Database (3NF) consisting of **14 interconnected tables**:
+* **Core:** `Users`, `Branches`, `Customers`
+* **Inventory:** `Products`, `Variants` (Color/Size), `Inventory` (Links Branch-Variant)
+* **Logistics:** `StockRequests` (Tracks From/To Branch movements)
+* **Sales:** `Transactions`, `TransactionDetails`, `FinancialRecords`
 
 ---
 
 ## ⚙️ Installation & Setup
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/SHYMOM/Nexus-Retail-ERP.git
+### Prerequisites
+* Visual Studio 2019 or 2022
+* Microsoft SQL Server Management Studio (SSMS)
+* .NET Desktop Runtime
+
+### Step 1: Database Setup
+1.  Open **SSMS**.
+2.  Open the `NexusERP_Database_Script.sql` file located in the `Database` folder.
+3.  Execute the script to create the `NexusERP` database and populate it with mock test data.
+
+### Step 2: Configuration
+1.  Open the solution file `NexusERP.sln` in Visual Studio.
+2.  Open `App.config` (or `DbContext` settings).
+3.  Update the **Connection String** to match your local SQL Server instance:
+    ```xml
+    <add name="NexusDB" connectionString="Data Source=YOUR_PC_NAME;Initial Catalog=NexusERP;Integrated Security=True;" providerName="System.Data.SqlClient" />
     ```
-2.  **Database Setup:**
-    - Open **SQL Server Management Studio (SSMS)**.
-    - Create a new database named `NexusERP`.
-    - Run the `Database_Script.sql` file located in the `SqlScripts` folder.
-3.  **Configure Connection:**
-    - Open the Solution in **Visual Studio**.
-    - Navigate to `App.config` (or `DBHelper.cs`).
-    - Update the `ConnectionString` with your local SQL Server name.
-4.  **Run:**
-    - Build and Start the project.
-    - Default Admin Credentials: `admin` / `1234` (or whatever you set in your script).
+
+### Step 3: Run the Application
+1.  Press **F5** to build and run.
+2.  Use the following default credentials for testing:
+
+| Role | Username | Password | Notes |
+| :--- | :--- | :--- | :--- |
+| **Owner** | `admin` | `1234` | Full Access |
+| **Manager** | `manager_dh` | `1234` | Dhanmondi Branch |
+| **Cashier** | `cashier_dh` | `1234` | Dhanmondi POS |
 
 ---
 
-## 🔮 Future Roadmap
+## 📸 Usage Scenarios
 
-- [ ] Mobile App for Owners to view sales on the go.
-- [ ] Offline Mode with local database synchronization.
-- [ ] Advanced BI (Business Intelligence) analytics.
+1.  **Testing Low Stock:** Log in as `manager_dh` and check the Dashboard for items marked in Red.
+2.  **Testing Kiosk:** Launch the Kiosk form. Search for "Mouse". See if it directs you to the Uttara branch.
+3.  **Testing Security:** Try to login with a wrong password and check the `AuditLogs` table in SQL.
 
 ---
+
+## 📄 License
+This project is developed for academic purposes and is open-source.
