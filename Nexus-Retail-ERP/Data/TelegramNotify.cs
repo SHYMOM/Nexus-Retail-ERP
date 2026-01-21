@@ -8,8 +8,8 @@ public static class TelegramNotify
 {
     private static readonly HttpClient client = new HttpClient();
 
-    private const string BotToken = "8584392246:AAE1FDlFu9uJzioXnovCKkmHp2Jr0BdMo3Y";
-    private const string GroupChatId = "-1003649231578";
+    private const string BotToken = "Put_Your_Bot_Token_Here";
+    private const string GroupChatId = "Put_Your_Group_ID_Here";
 
     public static void SendLog(string header, string body)
     {
